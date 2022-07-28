@@ -1,24 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import "./App.css";
+
+const BOOK_API_URL = "https://gutendex.com/books/";
+
+const getBooks = async () => {
+  const bookResponse = await fetch(BOOK_API_URL).then((response) =>
+    response.json()
+  );
+  console.log(bookResponse);
+  return bookResponse.results;
+};
 
 function App() {
+  const [books, setBooks] = useState([]);
+  useEffect(() => {
+    const execute = async () => {
+      const _books = await getBooks();
+      setBooks(_books);
+    };
+
+    execute();
+  }, []);
+  console.log(books);
   return (
     <div className="App">
-      dumdum
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {books.map((book) => (
+        <div>{book.title}</div>
+      ))}
     </div>
   );
 }
